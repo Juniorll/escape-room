@@ -252,49 +252,49 @@
                 data: [
                     { title: "Servidor Desorganizado", discipline: "Qualidade e Produtividade", 
                       story: "O servidor principal da empresa está com arquivos totalmente desorganizados, resultando em 30% de tempo desperdiçado. Você precisa aplicar o primeiro princípio de organização japonesa para desbloquear o acesso.",
-                      description: "Qual é o nome em japonês do princípio que significa 'Ordenação' ou 'Arrumação' (a primeira etapa do 5S)?",
+                      description: "Identifique o termo em japonês que significa 'Ordenação' ou 'Arrumação' (a primeira etapa do 5S) para encontrar o código.",
                       conversion: "Converta o nome japonês do princípio para números, usando a posição de cada letra no alfabeto (A=1, B=2, ..., Z=26). Concatene os dígitos.",
                       answer: 1959189 }, // SEIRI
                     
                     { title: "O Caminho da Missão", discipline: "Desenvolvimento de Projetos", 
-                      story: "A equipe de projetos recebeu um pacote com quatro números (1, 2, 3, 4) que representam as fases: 1. Execução, 2. Planejamento, 3. Iniciação, 4. Encerramento. Para abrir o cofre, você deve inserir os números na ordem cronológica correta.",
-                      description: "Qual é a sequência numérica das fases do projeto, ordenada corretamente (Iniciação -> Planejamento -> Execução -> Encerramento)?",
+                      story: "A equipe de projetos recebeu um pacote com quatro números que representam as fases, fora de ordem: 1. Execução, 2. Planejamento, 3. Iniciação, 4. Encerramento. Para abrir o cofre, você deve inserir os números na ordem cronológica correta.",
+                      description: "Para liberar a chave, você deve organizar os números fornecidos seguindo a ordem correta do Ciclo de Vida do Projeto.",
                       conversion: "Com base na sua compreensão do ciclo de vida do projeto, concatene os números fornecidos na tela, seguindo a ordem cronológica correta das quatro fases.",
                       answer: 3214 }, // Iniciação(3), Planejamento(2), Execução(1), Encerramento(4)
                     
                     { title: "O Cérebro das Coisas", discipline: "TI e Indústria 4.0", 
-                      story: "Um sistema de monitoramento de máquinas foi desativado. Ele é o pilar que permite a comunicação entre dispositivos. O código de reativação é baseado no acrônimo desse pilar.",
-                      description: "Qual é o acrônimo em inglês do pilar da Indústria 4.0 conhecido como 'Internet das Coisas'?",
+                      story: "Um sistema de monitoramento de máquinas foi desativado. Ele é o pilar que permite a comunicação entre dispositivos. O código de reativação é baseado no acrônimo desse pilar. (Atenção: acrônimo em inglês).",
+                      description: "O código é a conversão do acrônimo em inglês do pilar da Indústria 4.0, a rede que conecta dispositivos físicos.",
                       conversion: "Converta o acrônimo em inglês (3 letras) para a posição de cada letra no alfabeto (A=1, B=2, ...). Concatene os dígitos.",
                       answer: 91520 }, // IoT (9, 15, 20)
                     
                     { title: "O Ciclo de Melhoria", discipline: "Qualidade e Produtividade", 
                       story: "Um defeito de processo exige uma 'AÇÃO' imediata para evitar retrabalho. O código de acesso ao sistema de correção é baseado na contagem de letras e na posição desta etapa no ciclo.",
-                      description: "No Ciclo PDCA (Plan, Do, Check, Act), qual palavra em português define a etapa 'A' (Act)?",
+                      description: "Identifique a palavra em português que define a quarta e última fase do Ciclo PDCA (a etapa 'A'), responsável por consolidar a melhoria.",
                       conversion: "Use o número de letras da palavra em português que define a etapa 'A' do PDCA. Concatene-o com o número da sua posição no ciclo (1 a 4).",
                       answer: 54 }, // AÇÃO (5 letras), 4ª posição
                     
                     { title: "O Triângulo de Ferro", discipline: "Desenvolvimento de Projetos", 
                       story: "Em um projeto, três fatores estão sempre interligados. O código de desbloqueio está ligado ao fator que define 'O QUÊ' será entregue, sendo o mais importante para a aceitação do cliente.",
-                      description: "Qual palavra em português define 'O QUÊ' será entregue e é uma das restrições da Tripla Restrição (Tempo, Custo, e X)?",
+                      description: "Descubra o termo em português que define 'O QUÊ' será entregue e representa uma das restrições fundamentais da Tripla Restrição (Tempo, Custo, e X).",
                       conversion: "Converta o número de letras da palavra (em português) para um dígito. Repita esse dígito 5 vezes.",
                       answer: 66666 }, // ESCOPO (6 letras)
                     
                     { title: "As Cinco Dimensões", discipline: "TI e Indústria 4.0", 
                       story: "A base de dados cresceu exponencialmente, caracterizando o Big Data. O código de acesso é baseado nas suas dimensões, começando com a letra 'V'.",
-                      description: "Qual é a letra que representa o Big Data e quais são as dimensões que se referem à *Quantidade de Dados* e *Rapidez de Processamento*?",
+                      description: "Identifique a letra que representa o Big Data e as dimensões que se referem à *Quantidade de Dados* e *Rapidez de Processamento*.",
                       conversion: "O código é a concatenação da posição alfabética da letra 'V' (22), seguida pelo número de letras da palavra em português que define a *Quantidade de Dados*, e depois pelo número de letras da palavra que define a *Rapidez de Processamento*.",
                       answer: 22610 }, // V(22), Volume(6), Velocidade(10)
                     
                     { title: "O Diagrama Espinha de Peixe", discipline: "Qualidade e Produtividade", 
                       story: "Para analisar a causa de um problema de qualidade, a equipe usou o Diagrama de Ishikawa. O código é uma referência ao número de 'M's que iniciam as 6 categorias clássicas de análise.",
-                      description: "Quantas categorias no Diagrama de Ishikawa (em português) se iniciam com a letra 'M' (excluindo Pessoas, já considerada em Mão de Obra)?",
+                      description: "Para gerar o código, você deve contar o total de categorias no Diagrama de Ishikawa que se iniciam com a letra 'M' (em português).",
                       conversion: "Some o número de 'M's que iniciam as 6 categorias clássicas. Repita o resultado duas vezes e finalize com o número de letras da categoria 'Mão de Obra'.",
                       answer: 663 }, // 6 M's, repetido 66, Mão(3).
                     
                     { title: "A Janela de Oportunidade", discipline: "Desenvolvimento de Projetos", 
                       story: "A rota crítica do projeto foi calculada: A(5h) -> B(3h) -> C(7h). O código de conclusão é baseado na duração total dessa rota.",
-                      description: "Qual é a duração total do Caminho Crítico (em horas) da rota A(5h) -> B(3h) -> C(7h)?",
+                      description: "Seu objetivo é calcular a duração total do Caminho Crítico (em horas) da rota A(5h) -> B(3h) -> C(7h) para encontrar o primeiro componente do código.",
                       conversion: "O código é a concatenação da duração total do Caminho Crítico (em horas) seguida pelo número do desafio atual.",
                       answer: 158 } // 5+3+7=15h, desafio 8.
                 ]
@@ -305,49 +305,49 @@
                 data: [
                     { title: "O Custo Oculto", discipline: "Qualidade e Produtividade", 
                       story: "Uma regra diz que a maior parte dos custos de não qualidade está na ponta do 'iceberg' (10%). O código de acesso é uma combinação desse percentual com a contagem de letras na palavra 'Qualidade'.",
-                      description: "Qual é o percentual do custo de não qualidade que está na base do 'iceberg' e o restante está submerso (a Regra do Gelo)?",
+                      description: "Identifique o percentual do custo de não qualidade que está na base do 'iceberg' (a Regra do Gelo) para gerar o primeiro número da chave.",
                       conversion: "Converta o percentual para um número inteiro. Some o número de 'Q's na palavra 'Qualidade' com o número de 'N's na palavra 'Não Qualidade' e concatene o resultado com o número inteiro do percentual.",
                       answer: 1023 }, // 10 (inteiro) + 2 Q's + 3 N's
                     
                     { title: "Hierarquia de Tarefas", discipline: "Desenvolvimento de Projetos", 
-                      story: "A equipe precisa estruturar todas as entregas do projeto em uma hierarquia. O código é o acrônimo em inglês para essa estrutura, seguido pelo número de níveis que a estrutura possui (3 níveis).",
-                      description: "Qual é o acrônimo em inglês para 'Estrutura Analítica do Projeto'?",
+                      story: "A equipe precisa estruturar todas as entregas do projeto em uma hierarquia, desde o nível macro até as tarefas. O código é o acrônimo em inglês para essa estrutura, seguido pelo número de níveis (3) que a estrutura possui.",
+                      description: "O código é a conversão do acrônimo em inglês para a ferramenta de decomposição hierárquica, a 'Estrutura Analítica do Projeto'.",
                       conversion: "Converta o acrônimo em inglês (3 letras) para a posição de cada letra no alfabeto. Concatene os dígitos. O resultado final deve ser seguido pelo número de níveis hierárquicos (3).",
                       answer: 232193 }, // WBS (23, 2, 19) + 3
                     
                     { title: "O Triângulo da Segurança", discipline: "TI e Indústria 4.0", 
                       story: "Um sistema de segurança foi bloqueado. Para restaurá-lo, você precisa do código baseado na tríade de princípios que garante a segurança da informação (a sigla internacional).",
-                      description: "Qual é o acrônimo internacional (em inglês) para Confidencialidade, Integridade e Disponibilidade?",
+                      description: "Para liberar o sistema, use a sigla internacional (em inglês) para a Tríade da Segurança: Confidencialidade, Integridade e Disponibilidade.",
                       conversion: "Use a posição alfabética das letras do acrônimo internacional (em inglês) para a tríade da segurança. Concatene os dígitos.",
                       answer: 394 }, // CID (3, 9, 4)
                     
                     { title: "A Regra 80/20", discipline: "Qualidade e Produtividade", 
                       story: "O princípio de Pareto afirma que 80% dos problemas vêm de 20% das causas. O código de acesso é baseado na multiplicação dos números da regra pelo número total de ferramentas clássicas da qualidade (7).",
-                      description: "Quais são os dois números que compõem a Regra de Pareto (O maior e o menor)?",
+                      description: "O código depende da multiplicação dos dois números que compõem a Regra de Pareto pelo número total de Ferramentas Clássicas da Qualidade.",
                       conversion: "Multiplique o **maior** número da regra e o **menor** número da regra pelo total de ferramentas clássicas da qualidade (7) e concatene os dois resultados.",
                       answer: 560140 }, // (80*7=560), (20*7=140)
                     
                     { title: "O Risco Calculado", discipline: "Desenvolvimento de Projetos", 
                       story: "O cálculo de risco mostrou: Probabilidade 50%, Impacto R$ 10.000,00. O código é baseado no valor em centenas do risco (Probabilidade x Impacto).",
-                      description: "Qual é o Valor de Risco (Probabilidade x Impacto, em R$) deste cenário? Qual a palavra em português para esse conceito?",
+                      description: "O código se inicia com o Valor de Risco (Probabilidade x Impacto, em R$) expresso em centenas, seguido pela contagem de letras da palavra em português para esse conceito.",
                       conversion: "O Valor de Risco (em R$) deve ser expresso em centenas, seguido pelo número de letras da palavra 'Risco'.",
                       answer: 505 }, // Risco=R$5000. Em centenas: 50. 5 letras.
                     
                     { title: "As Camadas da Nuvem", discipline: "TI e Indústria 4.0", 
-                      story: "Os serviços de computação em nuvem (Cloud Computing) são oferecidos em três camadas principais. O código é baseado no número de letras dos acrônimos das camadas de **Software** e **Infraestrutura** e na palavra 'Nuvem'.",
-                      description: "Quais são as três camadas principais do Cloud Computing (Software, Plataforma e Infraestrutura)?",
+                      story: "Os serviços de computação em nuvem (Cloud Computing) são oferecidos em três camadas principais: Software, Plataforma e Infraestrutura. O código é baseado no número de letras dos acrônimos das camadas de **Software** e **Infraestrutura** e na palavra 'Nuvem'.",
+                      description: "O código é uma sequência de contagens de letras dos acrônimos de *Software como Serviço* (SaaS) e *Infraestrutura como Serviço* (IaaS), intercaladas com a contagem da palavra 'Nuvem'.",
                       conversion: "O código é a sequência formada pelo número de letras do acrônimo de *Software como Serviço*, seguido pelo número de letras da palavra 'Nuvem', e pelo número de letras do acrônimo de *Infraestrutura como Serviço*.",
                       answer: 454 }, // SaaS(4), Nuvem(5), IaaS(4)
                     
                     { title: "Meta Seis Sigma", discipline: "Qualidade e Produtividade", 
                       story: "Para alcançar a excelência Seis Sigma, o DPMO (Defeitos Por Milhão de Oportunidades) deve ser 3,4. O código de liberação é a parte inteira desse número combinada com a contagem de letras.",
-                      description: "Qual é o valor DPMO (Defeitos Por Milhão de Oportunidades) que define o nível de excelência Seis Sigma?",
+                      description: "Use a parte inteira do valor DPMO (Defeitos Por Milhão de Oportunidades) que define o nível de excelência Seis Sigma para iniciar o código.",
                       conversion: "O código é a concatenação da parte inteira do DPMO, seguida pelo número de 'S's na frase 'Seis Sigma'.",
                       answer: 32 }, // DPMO (3.4) tem parte inteira 3. Seis Sigma tem 2 'S's.
                     
                     { title: "O Desempenho Orçamentário", discipline: "Desenvolvimento de Projetos", 
                       story: "O projeto teve o Custo Real (CR) de R$ 12.000,00 e o Valor Agregado (VA) de R$ 15.000,00. O código final é o Índice de Desempenho de Custo (CPI).",
-                      description: "Qual o valor do Índice de Desempenho de Custo (CPI = VA/CR) para este projeto?",
+                      description: "O código requer o cálculo do Índice de Desempenho de Custo (CPI = VA/CR) e a combinação desse resultado com um número de referência.",
                       conversion: "Calcule o CPI, arredondando para duas casas decimais (remova a vírgula). Concatene este resultado com a soma dos dígitos do número 88.",
                       answer: 12516 } // CPI = 1.25 (125). 8+8=16.
                 ]
@@ -358,49 +358,49 @@
                 data: [
                     { title: "Eliminando o Desperdício", discipline: "Qualidade e Produtividade", 
                       story: "O sistema Lean busca eliminar os 7 tipos de desperdício (MUDAs). O código de acesso é uma combinação da contagem de letras dos desperdícios de 'Excesso de Produção' e 'Produtos com Falhas'.",
-                      description: "Quais são os dois desperdícios que se referem a 'Excesso de Produção' e 'Produtos com Falhas'?",
+                      description: "Identifique as palavras em português que definem os desperdícios de 'Excesso de Produção' e 'Produtos com Falhas' para realizar o cálculo.",
                       conversion: "Some o número de letras da palavra em português para o Desperdício de 'Excesso de Produção' e o Desperdício de 'Produtos com Falhas'. Use o resultado e concatene com o número de 'P's encontrados na palavra do primeiro desperdício.",
                       answer: 213 }, // Superprodução(13) + Defeitos(8) = 21. Superprodução tem 3 'P's.
                     
                     { title: "A Reunião Diária", discipline: "Desenvolvimento de Projetos", 
                       story: "O time ágil está preso no 'Daily Meeting' (reunião diária). O código é a contagem de letras das duas palavras em inglês que definem o termo.",
-                      description: "Qual o nome em inglês (duas palavras) da reunião diária do Scrum?",
+                      description: "O código é gerado pela contagem de letras das duas palavras em inglês que definem a reunião diária do Scrum.",
                       conversion: "Considere o nome em inglês (2 palavras) da reunião diária. O código é a concatenação do número de letras da primeira palavra, o número de letras da segunda palavra, seguido pelo número de vezes que a letra 'T' aparece nas duas palavras.",
                       answer: 583 }, // Daily(5), Meeting(8). 3 'T's.
                     
                     { title: "O Reflexo Virtual", discipline: "TI e Indústria 4.0", 
                       story: "As fábricas do futuro dependem de uma representação virtual de um objeto ou processo físico. O código é baseado na contagem de letras das duas palavras em inglês que definem este pilar da I4.0.",
-                      description: "Qual o nome em inglês (duas palavras) para 'Gêmeos Digitais'?",
+                      description: "Identifique o nome em inglês (2 palavras) para o pilar 'Gêmeos Digitais' e utilize a contagem de suas letras para o cálculo.",
                       conversion: "Considere o nome em inglês (2 palavras) do pilar. O código é a concatenação do número de letras da primeira palavra, o número de letras da segunda palavra, e, em seguida, o dígito da posição alfabética da letra inicial do nome (A=1, B=2...).",
                       answer: 7444 }, // Digital(7), Twin(4). D é 4ª letra.
                     
                     { title: "Mapeando o Fluxo", discipline: "Qualidade e Produtividade", 
                       story: "Um mapa de processo está incompleto. Falta o símbolo que representa uma 'Decisão' que pode levar a caminhos alternativos. O código é baseado na conversão desta palavra.",
-                      description: "Qual é a palavra (em português) que define o elemento de 'Decisão' no mapeamento de processos (BPMN)?",
+                      description: "O código é a conversão da palavra em português que define o elemento de 'Decisão' no mapeamento de processos (BPMN).",
                       conversion: "Converta a palavra (em português) que define o elemento de decisão. O código é a concatenação da posição alfabética da primeira letra, a posição alfabética da última letra, e a quantidade total de vogais na palavra.",
                       answer: 4154 }, // Decisão: D(4), O(15), 4 vogais.
                     
                     { title: "Gerenciamento de Expectativas", discipline: "Desenvolvimento de Projetos", 
                       story: "A matriz Poder/Interesse é crucial para gerenciar as partes interessadas. O código se refere à estratégia para o quadrante de ALTO Poder e BAIXO Interesse (os stakeholders mantidos satisfeitos).",
-                      description: "Qual a estratégia (duas palavras, em português) para o quadrante de ALTO Poder e BAIXO Interesse na Matriz de Stakeholders?",
+                      description: "O código depende da estratégia (2 palavras em português) aplicada ao quadrante de ALTO Poder e BAIXO Interesse na Matriz de Stakeholders.",
                       conversion: "Considere a estratégia (2 palavras) em português para este quadrante. Use o número de letras da primeira palavra, seguido pelo número de letras da segunda palavra, e, em seguida, a posição do quadrante (1, 2, 3 ou 4).",
                       answer: 954 }, // Gerenciar(9), Perto(5). Quadrante 4.
                     
                     { title: "Aprendizagem Supervisionada", discipline: "TI e Indústria 4.0", 
-                      story: "Um algoritmo de Machine Learning precisa de dados rotulados (etiquetados). O código está no nome em inglês que define esse tipo de aprendizado.",
-                      description: "Qual o termo em inglês (uma palavra) para 'Aprendizado Supervisionado' no Machine Learning?",
+                      story: "Um algoritmo de Machine Learning precisa de dados rotulados (etiquetados). O código está no nome em inglês que define esse tipo de aprendizado. (Atenção: termo em inglês, uma palavra).",
+                      description: "O código é a contagem de letras, vogais e 'S's do termo em inglês para 'Aprendizado Supervisionado' no Machine Learning.",
                       conversion: "Considere o termo em inglês (1 palavra) para este tipo de Aprendizado. Concatene: o total de letras, o total de vogais e o total de 'S's encontrados na palavra.",
                       answer: 1043 }, // Supervised (10), 4 vogais, 3 'S's.
                     
                     { title: "A Estrutura Unificada", discipline: "Qualidade e Produtividade", 
-                      story: "As novas normas ISO (ex: 9001) usam uma estrutura de alto nível para padronização. O código é baseado no nome em inglês desta estrutura (HLS).",
-                      description: "Qual o nome em inglês (3 palavras) da 'Estrutura de Alto Nível' (HLS) utilizada nas normas ISO?",
+                      story: "As novas normas ISO (ex: 9001) usam uma estrutura de alto nível para padronização de sistemas de gestão. O código é baseado no nome em inglês desta estrutura (HLS).",
+                      description: "Para gerar o código, utilize o nome completo em inglês (3 palavras) da 'Estrutura de Alto Nível' (HLS) utilizada nas normas ISO.",
                       conversion: "Considere o nome em inglês da estrutura (3 palavras). Some o número de letras das três palavras. Multiplique o resultado por 2 e concatene com o número de 'S's encontrados na frase.",
                       answer: 362 }, // High Level Structure (18 letras). 18*2=36. 2 'S's.
                     
                     { title: "O Último Pilar", discipline: "TI e Desenvolvimento de Projetos", 
-                      story: "A fusão de sistemas físicos e virtuais (o último pilar da I4.0) é a chave para o projeto. O código é a contagem de letras das três palavras em inglês que definem este conceito.",
-                      description: "Qual o nome em inglês (3 palavras) para 'Sistemas Cibernético-Físicos'?",
+                      story: "A fusão de sistemas físicos e virtuais é a chave para o projeto. O código é a contagem de letras das três palavras em inglês que definem este pilar fundamental da I4.0.",
+                      description: "O código é a soma do número de letras das três palavras em inglês que definem os 'Sistemas Cibernético-Físicos', repetida duas vezes.",
                       conversion: "Considere o nome em inglês (3 palavras) do pilar. Some o número de letras das três palavras. Repita o resultado desta soma duas vezes.",
                       answer: 2020 } // Cyber(5) + Physical(8) + Systems(7) = 20. Repetindo: 2020.
                 ]
