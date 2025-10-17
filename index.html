@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Escape Room 4.0: Missão Resgate</title>
+    <!-- Carregamento do Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Configuração da fonte Inter -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d1117;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        /* Estilização para a tela de eliminação, garantindo que cubra tudo */
+        #elimination-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            background-color: rgba(185, 28, 28, 0.95); /* Vermelho Escuro Quase Total */
+            display: none; /* Inicialmente oculto */
+        }
+        /* Estilização para o container principal */
+        .container-card {
+            background-color: #161b22;
+            border: 1px solid #30363d;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.5);
+            max-width: 900px;
+            width: 100%;
+        }
+        /* Estilização dos botões */
+        .primary-btn {
+            background-color: #238636;
+            transition: background-color 0.3s;
+        }
+        .primary-btn:hover {
+            background-color: #2ea043;
+        }
+        .text-neon {
+            color: #00ff7f; /* Verde Neon */
+            text-shadow: 0 0 5px #00ff7f;
+        }
+        /* Estilo para imagem/placeholder imersivo */
+        .immersive-asset {
+            min-height: 200px;
+            background-color: #010409;
+            border: 2px dashed #30363d;
+            color: #8b949e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div id="app-container" class="container-card rounded-xl p-6 md:p-10">
+
+    <!-- 1. TELA INICIAL -->
+    <div id="welcome-screen" class="space-y-6 text-center">
+        <h1 class="text-4xl md:text-5xl font-extrabold text-neon tracking-wider">ESCAPE ROOM 4.0</h1>
+        <p class="text-xl text-gray-300">"Missão Resgate: A Chave Digital"</p>
+        <p class="text-lg pt-4 text-left">
+            Um ataque cibernético devastador paralisou os sistemas da Indústria 4.0. A única forma de restaurar o sistema é inserindo uma sequência de 8 códigos mestres, que estão escondidos em desafios de **Qualidade, Produtividade, Projetos e Tecnologia da Informação**. Você e sua equipe são a última esperança. O tempo está correndo.
+        </p>
+        
+        <div class="pt-6">
+            <h2 class="text-2xl font-semibold mb-4 text-blue-400">Selecione o Nível de Dificuldade (Versão)</h2>
+            <select id="version-select" class="w-full md:w-1/2 p-3 rounded-lg bg-gray-700 border border-gray-600 text-white focus:ring-blue-500 focus:border-blue-500 text-lg">
+                <option value="V1">Versão 1: Código Zero (Iniciante)</option>
+                <option value="V2">Versão 2: Matriz Crítica (Intermediário)</option>
+                <option value="V3">Versão 3: Kernel Quântico (Avançado)</option>
+            </select>
+        </div>
+
+        <button onclick="startGame()" class="primary-btn mt-8 w-full md:w-2/3 py-4 text-xl font-bold rounded-xl uppercase shadow-lg hover:shadow-green-500/50">
+            Iniciar Missão
+        </button>
+    </div>
+
+    <!-- 2. TELA DO DESAFIO -->
+    <div id="challenge-screen" class="hidden space-y-6">
+        <div class="flex justify-between items-center border-b pb-4 border-gray-700">
+            <h2 id="challenge-title" class="text-2xl md:text-3xl font-bold text-yellow-400"></h2>
+            <div class="text-2xl font-mono p-2 bg-gray-800 rounded-lg border border-red-500">
+                <span id="timer-display">00:00:00</span>
+            </div>
+        </div>
+
+        <p id="challenge-story" class="text-gray-300 text-lg leading-relaxed"></p>
+
+        <!-- Placeholder Imersivo (Imagem/GIF/Meme) -->
+        <div id="immersive-placeholder" class="immersive-asset rounded-lg">
+            <span>[Anexo: Imagem ou GIF para contextualizar o desafio]</span>
+        </div>
+
+        <div class="pt-4 space-y-4">
+            <h3 class="text-xl font-semibold text-blue-300">Regra de Conversão (CRÍTICO!):</h3>
+            <p id="conversion-rule" class="text-gray-400 font-mono bg-gray-800 p-3 rounded-lg"></p>
+
+            <h3 class="text-xl font-semibold text-blue-300">Sua Sequência Numérica:</h3>
+            <input type="text" id="answer-input" placeholder="Insira a sequência numérica de resgate..."
+                   class="w-full p-4 text-xl bg-gray-700 border border-gray-600 rounded-lg text-white focus:ring-green-500 focus:border-green-500 tracking-widest"
+                   maxlength="20" oninput="this.value = this.value.replace(/[^0-9]/g, '');">
+            <p id="message-display" class="text-sm text-red-400"></p>
+        </div>
+
+        <button onclick="checkAnswer()" class="primary-btn w-full py-3 text-xl font-bold rounded-lg uppercase">
+            Enviar Código Mestre
+        </button>
+    </div>
+
+    <!-- 3. TELA DE FIM DE JOGO -->
+    <div id="end-screen" class="hidden space-y-6 text-center">
+        <h2 class="text-4xl font-extrabold text-neon">MISSÃO CUMPRIDA!</h2>
+        <p class="text-xl text-gray-300">Você salvou os sistemas da Indústria 4.0!</p>
+        <div class="bg-gray-800 p-6 rounded-xl border border-green-500 inline-block">
+            <p class="text-2xl font-bold text-green-400">Tempo Total de Resgate:</p>
+            <p id="final-time" class="text-5xl font-mono mt-2 text-white"></p>
+        </div>
+        
+        <p class="text-lg text-gray-400 pt-4">Anote este ID para o Ranking do Professor:</p>
+        <div class="bg-gray-700 p-4 rounded-lg font-mono text-lg break-words flex justify-center items-center">
+            <span id="user-id-display" class="text-yellow-300 mr-3"></span>
+            <button onclick="copyToClipboard(document.getElementById('user-id-display').innerText)" class="text-blue-400 hover:text-blue-200">
+                [Copiar ID]
+            </button>
+        </div>
+        <p id="score-status" class="text-green-500"></p>
+        
+        <button onclick="window.location.reload()" class="primary-btn mt-6 w-full md:w-2/3 py-4 text-xl font-bold rounded-xl uppercase">
+            Jogar Novamente
+        </button>
+    </div>
+
+    <!-- 4. MODAL DE ELIMINAÇÃO (Anti-Cheat) -->
+    <div id="elimination-overlay" class="flex justify-center items-center p-4 text-center">
+        <div class="bg-black p-8 rounded-lg border-4 border-red-600 shadow-2xl space-y-4">
+            <h3 class="text-4xl font-extrabold text-red-500">ELIMINADO!</h3>
+            <p class="text-xl text-gray-200">
+                Você tentou sair da página para realizar consultas externas. A missão exige foco total e conhecimento interno. Sua sessão foi encerrada.
+            </p>
+            <p class="text-lg font-bold text-red-400">Pressione F5 ou recarregue para iniciar uma nova partida.</p>
+        </div>
+    </div>
+
+    <!-- 5. MODAL DE ERRO/AVISO (Substituindo alert()) -->
+    <div id="modal-message" class="fixed inset-0 bg-black bg-opacity-75 z-50 hidden flex justify-center items-center p-4">
+        <div class="bg-gray-900 p-6 rounded-lg border-2 border-yellow-500 shadow-2xl max-w-sm w-full space-y-3">
+            <h4 id="modal-title" class="text-2xl font-bold text-yellow-400"></h4>
+            <p id="modal-text" class="text-gray-300"></p>
+            <button onclick="closeModal()" class="w-full py-2 bg-yellow-600 hover:bg-yellow-700 text-white font-semibold rounded-lg">
+                Entendi
+            </button>
+        </div>
+    </div>
+
+</div>
+
+<!-- FIREBASE IMPORTS E SCRIPTS -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    
+    // Variáveis globais obrigatórias do ambiente Canvas
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'escape-room-educacional';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    let db;
+    let auth;
+    let userId = 'anonimo_' + crypto.randomUUID().substring(0, 8); // Fallback inicial
+
+    let currentVersion = 'V1';
+    let currentChallengeIndex = 0;
+    let startTime = null;
+    let timerInterval = null;
+    const TOTAL_CHALLENGES = 8;
+    
+    // --- FUNÇÕES DE UTILTIDADE ---
+    
+    function showModal(title, text) {
+        document.getElementById('modal-title').innerText = title;
+        document.getElementById('modal-text').innerText = text;
+        document.getElementById('modal-message').classList.remove('hidden');
+    }
+    // EXPORTANDO PARA O ESCOPO GLOBAL
+    window.showModal = showModal;
+
+    function closeModal() {
+        document.getElementById('modal-message').classList.add('hidden');
+    }
+    // EXPORTANDO PARA O ESCOPO GLOBAL
+    window.closeModal = closeModal;
+
+    function formatTime(totalSeconds) {
+        const h = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+        const m = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+        const s = String(totalSeconds % 60).padStart(2, '0');
+        return `${h}:${m}:${s}`;
+    }
+
+    function copyToClipboard(text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showModal("Copiado!", "O ID do Usuário foi copiado para a área de transferência para que o professor possa registrar seu tempo.");
+        }).catch(err => {
+            showModal("Erro ao Copiar", "Não foi possível copiar o ID automaticamente. Por favor, anote-o: " + text);
+        });
+    }
+    // EXPORTANDO PARA O ESCOPO GLOBAL
+    window.copyToClipboard = copyToClipboard;
+
+    // --- FIREBASE E AUTENTICAÇÃO ---
+
+    // Inicializa Firebase, Auth e Firestore e define o UID
+    async function initializeFirebase() {
+        if (!firebaseConfig) {
+            console.error("Firebase Config não está disponível.");
+            return;
+        }
+        
+        const app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                userId = user.uid;
+            } else {
+                // Tenta logar anonimamente se o token não estiver disponível
+                if (initialAuthToken) {
+                    try {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        // onAuthStateChanged será chamado novamente com o usuário logado
+                    } catch (error) {
+                        console.error("Erro ao fazer login com token customizado:", error);
+                        await signInAnonymously(auth);
+                    }
+                } else {
+                    await signInAnonymously(auth);
+                }
+            }
+            document.getElementById('user-id-display').innerText = userId;
+        });
+    }
+    
+    // --- LÓGICA DO TIMER ---
+
+    function startTimer() {
+        startTime = Date.now();
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        return Math.floor((Date.now() - startTime) / 1000); // Tempo total em segundos
+    }
+
+    function updateTimer() {
+        if (!startTime) return;
+        const elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById('timer-display').innerText = formatTime(elapsedSeconds);
+    }
+    
+    // --- LÓGICA ANTI-CHEAT (Detecção de Mudança de Foco/Aba) ---
+
+    let isPlaying = false;
+
+    function handleVisibilityChange() {
+        if (!isPlaying) return;
+        
+        // Se a aba não estiver visível (o usuário mudou de aba ou minimizou)
+        if (document.hidden) {
+            eliminatePlayer();
+        }
+    }
+    
+    function eliminatePlayer() {
+        if (!isPlaying) return;
+        stopTimer();
+        isPlaying = false; // Garante que o timer não reinicie
+        document.getElementById('elimination-overlay').style.display = 'flex';
+        // Impede qualquer interação subsequente no jogo
+    }
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    
+    // --- ESTRUTURA DOS DESAFIOS (CONTEÚDO) ---
+
+    const challenges = {
+        V1: { // Versão 1: Código Zero (Iniciante)
+            name: "Código Zero",
+            description: "Introdução e conceitos básicos.",
+            data: [
+                // C1: Qualidade e Produtividade (5S)
+                {
+                    title: "Desafio 1/8: Servidor Desorganizado (5S)",
+                    story: "O primeiro código foi criptografado com o princípio do 5S responsável por manter a ordem no ambiente, essencial para a Produtividade. Você encontra o arquivo corrompido em um servidor que claramente não segue o princípio de 'Organização'. A resposta é o nome japonês para 'Ordenação' ou 'Arrumação'.",
+                    asset: "Meme/GIF de um escritório caótico (Seiton).",
+                    conversion: "Converta a palavra (apenas o nome japonês) usando a posição de cada letra no alfabeto (A=1, B=2, ..., Z=26). Concatene os dígitos.",
+                    correctAnswer: "1959189", // S(19) E(5) I(9) R(18) I(9) -> Seiri
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C2: Desenvolvimento de Projetos (Fases)
+                {
+                    title: "Desafio 2/8: O Caminho da Missão",
+                    story: "Para iniciar a restauração, você precisa traçar as fases do projeto de resgate. O código é a sequência correta dos números das quatro fases clássicas de um projeto, na ordem em que ocorrem: 1. Execução, 2. Planejamento, 3. Iniciação, 4. Encerramento.",
+                    asset: "Diagrama simples de um ciclo de vida de projeto.",
+                    conversion: "Use os números fornecidos para as fases (1 a 4) e concatene-os na ordem correta de execução do projeto.",
+                    correctAnswer: "3214", // Iniciação(3), Planejamento(2), Execução(1), Encerramento(4)
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C3: TI e Indústria 4.0 (Pilar IoT)
+                {
+                    title: "Desafio 3/8: O Cérebro das Coisas (IoT)",
+                    story: "Um sensor de rede exibe um erro 'falha de comunicação com o pilar 4.0'. O código está relacionado ao pilar que conecta máquinas e sistemas, permitindo a troca de dados em tempo real. A resposta é o acrônimo em inglês para 'Internet das Coisas'.",
+                    asset: "Foto de um chip ou sensor de rede.",
+                    conversion: "Converta o acrônimo de 3 letras (em inglês) para a posição de cada letra no alfabeto (A=1, B=2, ...). Concatenando os dígitos. Ex: BCD -> 234.",
+                    correctAnswer: "91520", // I(9) O(15) T(20) -> IoT
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C4: Qualidade e Produtividade (PDCA)
+                {
+                    title: "Desafio 4/8: O Ciclo de Melhoria (PDCA)",
+                    story: "O sistema de qualidade só será restaurado se você identificar o 'A' no ciclo PDCA, que garante a melhoria contínua. Qual é a etapa que se refere a 'Ação Corretiva'?",
+                    asset: "Gráfico do Ciclo PDCA.",
+                    conversion: "Use o número de letras da palavra correspondente à etapa 'A' (em português) e concatene-o com o número da sua posição no ciclo (P=1, D=2, C=3, A=4).",
+                    correctAnswer: "54", // AÇÃO (5 letras), Posição (4)
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C5: Desenvolvimento de Projetos (Restrições)
+                {
+                    title: "Desafio 5/8: O Triângulo de Ferro",
+                    story: "O plano de resgate está sob restrições severas. A 'Tripla Restrição' de um projeto é formada por três elementos cruciais. O código é o número de letras da palavra que define o 'O QUÊ' será entregue (o objetivo).",
+                    asset: "Imagem do 'Triângulo de Ferro' (Scope, Time, Cost).",
+                    conversion: "Converta o número de letras da palavra em português que define 'O QUÊ' será entregue. Repita esse dígito 5 vezes.",
+                    correctAnswer: "66666", // ESCOPO (6 letras)
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C6: TI e Indústria 4.0 (Big Data)
+                {
+                    title: "Desafio 6/8: As Cinco Dimensões (V's)",
+                    story: "Para processar os dados do ataque, precisamos entender os 'V's do Big Data. O código é baseado nos 'V's mais críticos: Volume (a quantidade) e Velocidade (a rapidez).",
+                    asset: "Infográfico dos 5 V's do Big Data.",
+                    conversion: "O código é a concatenação do valor da posição alfabética de 'V' (V=22), seguido pelo número de letras da palavra 'Volume', e depois pelo número de letras da palavra 'Velocidade'.",
+                    correctAnswer: "22610", // V(22), Volume(6 letras), Velocidade(10 letras)
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C7: Qualidade e Produtividade (Causa e Efeito - Ishikawa)
+                {
+                    title: "Desafio 7/8: O Diagrama Espinha de Peixe",
+                    story: "Identificar a raiz do problema é crucial. O Diagrama de Ishikawa organiza as causas em categorias. O código é o total de 'M's que compõem os 6 M's clássicos da indústria (Mão de Obra, Método, Material, Máquina, Medida, Meio Ambiente).",
+                    asset: "Desenho de um Diagrama de Ishikawa.",
+                    conversion: "O código é a sequência numérica formada pelo total de 'M's encontrados nas 6 palavras (4), repetido o total de 'M's que você encontrou (4).",
+                    correctAnswer: "4444", // Total de M's = 4. Repete 4 vezes.
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C8: Desenvolvimento de Projetos (Caminho Crítico)
+                {
+                    title: "Desafio 8/8: A Janela de Oportunidade (Caminho Crítico)",
+                    story: "Este é o último código! A missão só pode ser restaurada se você determinar o tempo total do Caminho Crítico. Se o Caminho Crítico tem as seguintes durações (em horas): Tarefa A (5h), Tarefa B (3h), Tarefa C (7h). A sequência de tarefas é A -> B -> C. A DURAÇÃO TOTAL em horas é o código.",
+                    asset: "Um gif de uma barra de progresso quase completa.",
+                    conversion: "O código é a concatenação do resultado da duração total (em horas) seguido pela sua posição de ordem (8).",
+                    correctAnswer: "158", // A(5) + B(3) + C(7) = 15. Posição 8.
+                    discipline: "Desenvolvimento de Projetos",
+                },
+            ],
+        },
+        V2: { // Versão 2: Matriz Crítica (Intermediário) - CONTEÚDO FINALIZADO
+            name: "Matriz Crítica",
+            description: "Análise de Riscos e Otimização de Processos.",
+            data: [
+                // C1: Qualidade e Produtividade (Custo da Não Qualidade)
+                {
+                    title: "Desafio 1/8: O Custo Oculto (Não Qualidade)",
+                    story: "A falha inicial nos sistemas foi causada por um erro humano. Em uma análise, o 'Custo da Não Qualidade' foi de R$ 5.000,00. Se o custo total do projeto era R$ 50.000,00, qual é o percentual do Custo da Não Qualidade?",
+                    asset: "Gráfico de pizza representando custos.",
+                    conversion: "Converta o percentual para um número inteiro, multiplique pelo número de 'Q's na palavra 'Qualidade' e concatene com o número de 'N's na palavra 'Não Qualidade'.",
+                    correctAnswer: "1023", // 5000/50000 = 0.10 -> 10. Q (2), N (3) -> 1023
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C2: Desenvolvimento de Projetos (EAP)
+                {
+                    title: "Desafio 2/8: Hierarquia de Tarefas (EAP)",
+                    story: "Para retomar a organização do projeto, identifique a sigla em inglês para a técnica que decompõe as entregas do projeto em componentes menores e gerenciáveis (Estrutura Analítica do Projeto).",
+                    asset: "Diagrama de árvore de tarefas.",
+                    conversion: "Converta a sigla em inglês (3 letras) para a posição de cada letra no alfabeto (A=1, B=2...), e some os valores. Concatene o resultado com o número de níveis hierárquicos (3).",
+                    correctAnswer: "693", // W(23) B(2) S(19) = 44. O código é a soma: 44. Vamos mudar para sequência:
+                    conversion: "Converta a sigla em inglês (3 letras) para a posição de cada letra no alfabeto (A=1, B=2...). Concatene os dígitos. O resultado final deve ser seguido pelo número de níveis hierárquicos (3).",
+                    correctAnswer: "232193", // W(23) B(2) S(19). Níveis (3) -> 232193
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C3: TI e Indústria 4.0 (Segurança - C.I.D.)
+                {
+                    title: "Desafio 3/8: O Triângulo da Segurança",
+                    story: "A falha de comunicação precisa ser revertida garantindo a Segurança da Informação. O código é formado pelo acrônimo C.I.D. (Confidencialidade, Integridade, Disponibilidade), convertido para números de acordo com a posição da letra no alfabeto.",
+                    asset: "Ícone de cadeado digital.",
+                    conversion: "Use a posição alfabética das três letras do acrônimo C.I.D. (em inglês) e concatene os dígitos. C=3, I=9, D=4.",
+                    correctAnswer: "394", // C(3) I(9) D(4)
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C4: Qualidade e Produtividade (Pareto)
+                {
+                    title: "Desafio 4/8: A Regra 80/20 (Pareto)",
+                    story: "Dos 100 erros de sistema registrados, 80 foram causados por apenas 20 linhas de código. O código é a sequência dos números da 'Regra de Pareto' (80% e 20%), multiplicados pelo número de ferramentas da qualidade (7).",
+                    asset: "Gráfico de barras de Pareto.",
+                    conversion: "Multiplique os dois números da regra (80 e 20) por 7 e concatene os dois resultados.",
+                    correctAnswer: "560140", // 80*7=560, 20*7=140.
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C5: Desenvolvimento de Projetos (Matriz de Risco)
+                {
+                    title: "Desafio 5/8: O Risco Calculado",
+                    story: "O atraso na entrega tem 50% de Probabilidade (0.5) e um Impacto de R$ 10.000,00. O 'Valor de Risco' (Probabilidade x Impacto) é o código. Expresse o resultado em centenas de Reais, e depois, insira o número de letras da palavra 'Risco'.",
+                    asset: "Matriz de Probabilidade e Impacto.",
+                    conversion: "O valor de risco (em R$) dividido por 100 (centenas), seguido pelo número de letras da palavra 'Risco'.",
+                    correctAnswer: "505", // Risco = 0.5 * 10000 = 5000. 5000/100 = 50. Risco (5 letras) -> 505
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C6: TI e Indústria 4.0 (Cloud Computing)
+                {
+                    title: "Desafio 6/8: As Camadas da Nuvem",
+                    story: "Os sistemas de resgate operam em 'Cloud Computing'. Identifique o tipo de serviço que fornece o 'Software' pronto para uso (SaaS) e use o número de letras do acrônimo. Concatene com o número de letras da palavra 'Nuvem'.",
+                    asset: "Diagrama de pilhas IaaS, PaaS, SaaS.",
+                    conversion: "O código é a sequência formada pelo número de letras do acrônimo SaaS (4), seguido pelo número de letras da palavra 'Nuvem' (5) e pelo número de letras do acrônimo IaaS (4).",
+                    correctAnswer: "454",
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C7: Qualidade e Produtividade (DPMO)
+                {
+                    title: "Desafio 7/8: Meta Seis Sigma (DPMO)",
+                    story: "Para reverter o ataque, precisamos de uma qualidade de 99.99966%. Este é o objetivo Seis Sigma, que equivale a quantos Defeitos Por Milhão de Oportunidades (DPMO)?",
+                    asset: "Tabela de Níveis Sigma.",
+                    conversion: "O código é a concatenação do valor DPMO (3.4) com o número da posição do 'Sigma' correspondente (6). Use apenas a parte inteira do DPMO (3) e o número de 'S's na frase 'Seis Sigma'.",
+                    correctAnswer: "32", // DPMO (3), Seis Sigma (2 'S's)
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C8: Desenvolvimento de Projetos (Valor Agregado)
+                {
+                    title: "Desafio 8/8: O Desempenho Orçamentário",
+                    story: "O último código exige o cálculo do Índice de Desempenho de Custo (CPI), que mede a eficiência orçamentária do projeto. CPI = Valor Agregado (EV) / Custo Real (AC). Se EV = R$ 15.000,00 e AC = R$ 12.000,00, qual é o CPI?",
+                    asset: "Tabela com métricas EVM.",
+                    conversion: "Use o resultado do CPI arredondado para duas casas decimais (remova a vírgula) e concatene com a soma dos dígitos do número 88 (que representa o desafio final).",
+                    correctAnswer: "12516", // 15000/12000 = 1.25. 1.25 -> 125. 8+8 = 16. -> 12516
+                    discipline: "Desenvolvimento de Projetos",
+                },
+            ]
+        },
+        V3: { // Versão 3: Kernel Quântico (Avançado) - CONTEÚDO FINALIZADO
+            name: "Kernel Quântico",
+            description: "Estratégia e Inovação 4.0.",
+            data: [
+                // C1: Qualidade e Produtividade (Lean - 7 Desperdícios)
+                {
+                    title: "Desafio 1/8: Eliminando o Desperdício (Lean)",
+                    story: "A lentidão no sistema deve-se a um dos 7 Desperdícios do Lean. O código é a soma das letras das palavras em português que correspondem ao 'Excesso de Produção' e 'Defeitos'.",
+                    asset: "Ilustração dos 7 Desperdícios (TIM WOODS).",
+                    conversion: "Some o número de letras de 'Superprodução' (13) com 'Defeitos' (8). Use o resultado e concatene com o número de 'P's encontrados em 'Superprodução' (3).",
+                    correctAnswer: "213", // 13+8 = 21. 'Superprodução' tem 3 P's.
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C2: Desenvolvimento de Projetos (Metodologias Ágeis - Scrum)
+                {
+                    title: "Desafio 2/8: A Reunião Diária (Scrum)",
+                    story: "O time de resgate precisa de agilidade. No Scrum, há uma reunião diária, curta e em pé. Qual o nome em inglês (2 palavras) dessa reunião?",
+                    asset: "Time Scrum em frente a um quadro Kanban.",
+                    conversion: "Converta a primeira palavra para o número de letras (5), e a segunda palavra para o valor da posição de cada letra no alfabeto (A=1), concatenando-os. Ex: DAILY MEETING.",
+                    correctAnswer: "5135209147", // Daily (5 letras). Meeting -> M(13) E(5) E(5) T(20) I(9) N(14) G(7). 5, 13, 5, 5, 20, 9, 14, 7. Vamos simplificar a regra.
+                    conversion: "Converta a primeira palavra (em inglês) para o número de letras (5), e a segunda palavra para o número total de letras (8). Concatene os dois resultados, seguido pelo número de vezes que a letra 'T' aparece nas duas palavras (3).",
+                    correctAnswer: "583", // DAILY (5), MEETING (8). T (3 vezes) -> 583
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C3: TI e Indústria 4.0 (Gêmeos Digitais)
+                {
+                    title: "Desafio 3/8: O Reflexo Virtual",
+                    story: "Para testar a correção sem derrubar o sistema, usamos o pilar que cria uma réplica virtual de um objeto físico. Qual o nome em inglês (2 palavras) desse pilar, que começa com 'D'?",
+                    asset: "Gráfico de Digital Twin.",
+                    conversion: "Use o número de letras da primeira palavra (7) e da segunda palavra (4). Concatene-os e multiplique pelo número da posição alfabética da primeira letra (D=4).",
+                    correctAnswer: "744", // Digital (7) Twin (4). D(4) -> 744 (74 * 4 = 296. Mudar para concatenação é mais fácil).
+                    conversion: "Use o número de letras da primeira palavra (7) e da segunda palavra (4). Concatene-os e repita o dígito da posição alfabética da primeira letra (D=4).",
+                    correctAnswer: "7444", // Digital (7) Twin (4). D(4) -> 7444
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C4: Qualidade e Produtividade (BPMN)
+                {
+                    title: "Desafio 4/8: Mapeando o Fluxo (BPMN)",
+                    story: "O sistema de qualidade depende de um fluxo de processos bem definido. Na notação BPMN, qual é o nome do elemento que representa uma decisão ou um ponto de convergência/divergência do fluxo?",
+                    asset: "Exemplo de diagrama BPMN.",
+                    conversion: "Converta a palavra (em português, 8 letras) para a posição alfabética da primeira e última letra. Concatene com a quantidade total de vogais na palavra.",
+                    correctAnswer: "7154", // GATEWAY (em inglês, 7 letras). Vamos usar o português: DECISÃO (7 letras).
+                    conversion: "Converta a palavra (em português, 7 letras) para a posição alfabética da primeira (D=4) e última letra (O=15). Concatene com a quantidade total de vogais na palavra (4).",
+                    correctAnswer: "4154", // DECISÃO. D(4), O(15). 4 Vogais. -> 4154
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C5: Desenvolvimento de Projetos (Matriz Poder-Interesse)
+                {
+                    title: "Desafio 5/8: Gerenciamento de Expectativas",
+                    story: "A comunicação com a diretoria (Alto Poder, Alto Interesse) deve ser gerenciada de perto. O código é a soma das letras da frase que resume a estratégia de engajamento para esse grupo de Stakeholders (3 palavras).",
+                    asset: "Matriz Poder vs Interesse.",
+                    conversion: "Some o número de letras das três palavras da estratégia de engajamento em inglês: 'Manage Closely'. Repita o resultado 3 vezes.",
+                    correctAnswer: "141414", // Manage(6) Closely(7) = 13. Vamos usar português: Gerenciar de Perto.
+                    conversion: "Some o número de letras das três palavras da estratégia de engajamento em português: 'Gerenciar de Perto'. Concatene com o número de 'A's na frase.",
+                    correctAnswer: "142", // Gerenciar(9) de(2) Perto(5) = 16. Mudar para 'Gerenciar De Perto' = 16. Não.
+                    conversion: "Use o número de letras da palavra 'Gerenciar' (9) seguido pelo número de letras da palavra 'Perto' (5), e concatene com o número da posição do quadrante (4).",
+                    correctAnswer: "954", // Quadrante 4 (Alto Poder/Alto Interesse)
+                    discipline: "Desenvolvimento de Projetos",
+                },
+                // C6: TI e Indústria 4.0 (Aprendizado de Máquina)
+                {
+                    title: "Desafio 6/8: Aprendizagem Supervisionada",
+                    story: "O módulo de IA precisa ser restaurado. O código é o número de letras da palavra (em inglês, 10 letras) que define o tipo de 'Aprendizado de Máquina' que utiliza dados de treinamento com rótulos (labels).",
+                    asset: "Ilustração de um modelo de Machine Learning.",
+                    conversion: "O código é a sequência formada pelo número de letras da palavra 'Supervised' (10), seguido pelo número de vogais (4) e, por fim, pelo número de 'S's (3) na palavra.",
+                    correctAnswer: "1043", // Supervised. 10 letras, 4 vogais, 3 S's.
+                    discipline: "TI e Indústria 4.0",
+                },
+                // C7: Qualidade e Produtividade (ISO - HLS)
+                {
+                    title: "Desafio 7/8: A Estrutura Unificada (HLS)",
+                    story: "As normas ISO de gestão (9001, 14001, 45001) compartilham uma estrutura de alto nível, para facilitar a integração dos sistemas. O código é formado pela soma das letras do nome em inglês dessa estrutura (3 palavras).",
+                    asset: "Tabela de seções da HLS.",
+                    conversion: "Some o número de letras das três palavras do acrônimo HLS (High Level Structure) e concatene o resultado com o número de 'L's encontrados (2).",
+                    correctAnswer: "202", // High(4) Level(5) Structure(9) = 18. Ops, vamos somar e concatenar com 2.
+                    conversion: "Some o número de letras de 'High Level Structure' (18). Multiplique por 2 e concatene com o número de 'S's (2).",
+                    correctAnswer: "362", // 18 * 2 = 36. 2 S's. -> 362
+                    discipline: "Qualidade e Produtividade",
+                },
+                // C8: Desenvolvimento de Projetos / TI (Convergência)
+                {
+                    title: "Desafio 8/8: O Último Pilar (Cibernético-Físico)",
+                    story: "A restauração completa só ocorre com a ativação do último pilar da I4.0, que representa a fusão do mundo digital e físico, essenciais para a automação e controle em tempo real. O código é a soma dos números de letras das 4 palavras do pilar (em inglês: Cyber Physical Systems).",
+                    asset: "Ilustração de sistemas Cyber-Physical.",
+                    conversion: "Some o número de letras das quatro palavras: 'Cyber' (5), 'Physical' (8), 'Systems' (7). Repita o resultado (20) duas vezes.",
+                    correctAnswer: "2020", // 5+8+7 = 20. Repete 2 vezes.
+                    discipline: "TI e Desenvolvimento de Projetos",
+                },
+            ]
+        },
+    };
+    
+    // --- LÓGICA PRINCIPAL DO JOGO ---
+
+    function startGame() {
+        currentVersion = document.getElementById('version-select').value;
+        currentChallengeIndex = 0;
+        
+        document.getElementById('welcome-screen').classList.add('hidden');
+        document.getElementById('end-screen').classList.add('hidden');
+        document.getElementById('challenge-screen').classList.remove('hidden');
+        
+        isPlaying = true;
+        loadChallenge();
+        startTimer();
+    }
+    // EXPORTANDO PARA O ESCOPO GLOBAL
+    window.startGame = startGame;
+
+    function loadChallenge() {
+        const challenge = challenges[currentVersion].data[currentChallengeIndex];
+        
+        if (!challenge) {
+            endGame();
+            return;
+        }
+
+        document.getElementById('challenge-title').innerText = `${challenges[currentVersion].name} | ${challenge.title} (${challenge.discipline})`;
+        document.getElementById('challenge-story').innerHTML = challenge.story;
+        document.getElementById('conversion-rule').innerText = challenge.conversion;
+        document.getElementById('immersive-placeholder').innerHTML = `<span class="text-xl font-bold">${challenge.asset}</span>`;
+        document.getElementById('answer-input').value = '';
+        document.getElementById('message-display').innerText = '';
+    }
+
+    function checkAnswer() {
+        const input = document.getElementById('answer-input').value.trim();
+        const challenge = challenges[currentVersion].data[currentChallengeIndex];
+        const messageDisplay = document.getElementById('message-display');
+
+        if (input.length === 0) {
+            messageDisplay.innerText = "Por favor, insira o Código Mestre.";
+            return;
+        }
+
+        // A resposta deve ser uma sequência numérica exata
+        if (input === challenge.correctAnswer) {
+            currentChallengeIndex++;
+            messageDisplay.innerText = "Código Aceito! Avançando para o próximo desafio...";
+            
+            // Adiciona um pequeno atraso para o aluno ler a mensagem
+            setTimeout(() => {
+                if (currentChallengeIndex < TOTAL_CHALLENGES) {
+                    loadChallenge();
+                } else {
+                    endGame();
+                }
+            }, 1500);
+            
+        } else {
+            messageDisplay.innerText = "CÓDIGO INCORRETO. Tente novamente ou revise a Regra de Conversão.";
+        }
+    }
+    // EXPORTANDO PARA O ESCOPO GLOBAL
+    window.checkAnswer = checkAnswer;
+
+    async function endGame() {
+        isPlaying = false;
+        const totalSeconds = stopTimer();
+        const finalTimeFormatted = formatTime(totalSeconds);
+        
+        document.getElementById('challenge-screen').classList.add('hidden');
+        document.getElementById('final-time').innerText = finalTimeFormatted;
+        document.getElementById('end-screen').classList.remove('hidden');
+
+        // Salvamento do Score (MANDATÓRIO com Firestore)
+        if (db && userId) {
+            const timeInMinutes = (totalSeconds / 60).toFixed(2);
+            
+            // Path: /artifacts/{appId}/users/{userId}/results/
+            const resultsRef = doc(db, 'artifacts', appId, 'users', userId, 'results', currentVersion);
+
+            const resultData = {
+                userId: userId,
+                version: currentVersion,
+                timeSeconds: totalSeconds,
+                timeMinutes: timeInMinutes,
+                finishTime: finalTimeFormatted,
+                timestamp: serverTimestamp()
+            };
+
+            // Usamos setDoc para salvar ou atualizar (caso o mesmo aluno jogue a mesma versão)
+            try {
+                await setDoc(resultsRef, resultData, { merge: true });
+                document.getElementById('score-status').innerText = `Seu tempo (${finalTimeFormatted}) foi registrado no ranking da turma!`;
+            } catch (e) {
+                console.error("Erro ao salvar o resultado no Firestore:", e);
+                document.getElementById('score-status').innerText = "Erro ao registrar o tempo. Anote o ID e tempo manualmente.";
+            }
+        }
+    }
+    
+    // Inicia a aplicação no carregamento da janela
+    window.onload = initializeFirebase;
+</script>
+
+</body>
+</html>
